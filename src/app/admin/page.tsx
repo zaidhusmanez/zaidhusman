@@ -251,28 +251,31 @@ function ProjectForm({
     
     for (const file of uploadFiles) {
       try {
-        console.log(`Starting upload for ${file.name}...`)
-        const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+        console.log(`Uploading: ${file.name}...`)
+        const uploadFormData = new FormData()
+        uploadFormData.append('file', file)
+
+        const res = await fetch('/api/upload', {
           method: 'POST',
-          body: file,
+          body: uploadFormData,
         })
         
         const data = await res.json()
         
         if (res.ok && data.url) {
-          console.log(`Successfully uploaded ${file.name}:`, data.url)
+          console.log(`Success: ${data.url}`)
           setFormData(prev => ({
             ...prev,
-            image: prev.image || data.url, // Set main image if not set
+            image: prev.image || data.url,
             images: [...(prev.images || []), data.url]
           }))
         } else {
-          console.error(`Upload error for ${file.name}:`, data.message)
-          alert(`Upload failed for ${file.name}: ${data.message || 'Unknown error'}`)
+          console.error('Upload Error:', data)
+          alert(`Upload failed: ${data.message || data.error || 'Unknown error'}`)
         }
       } catch (err) {
-        console.error(`Upload catch error for ${file.name}:`, err)
-        alert(`Failed to upload ${file.name}. Check your connection and Vercel Blob setup.`)
+        console.error('Network Error:', err)
+        alert('Upload failed. Please check your internet and if the file is too large.')
       }
     }
     setUploading(false)
