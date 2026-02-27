@@ -32,15 +32,15 @@ This makes the “Download CV” button download the PDF instead of opening the 
    git add .
    git commit -m "Initial commit - portfolio"
    ```
-7. Add the GitHub repo and push (using your repo: **zaidhusman/zaidhusman**):
+7. Add the GitHub repo and push (using your repo: **zaidhusmanez/zaidhusman**):
    ```bash
-   git remote add origin https://github.com/zaidhusman/zaidhusman.git
+   git remote add origin https://github.com/zaidhusmanez/zaidhusman.git
    git branch -M main
    git push -u origin main
    ```
    If you use SSH:
    ```bash
-   git remote add origin git@github.com:zaidhusman/zaidhusman.git
+   git remote add origin git@github.com:zaidhusmanez/zaidhusman.git
    git branch -M main
    git push -u origin main
    ```
@@ -58,7 +58,7 @@ This makes the “Download CV” button download the PDF instead of opening the 
 ### Step 2: Import your repository
 
 1. On the Vercel dashboard, click **“Add New…”** → **“Project”**.
-2. You’ll see a list of your GitHub repositories. Find **`zaidhusman`** and click **“Import”**.
+2. You’ll see a list of your GitHub repositories. Find **`zaidhusman`** (under account zaidhusmanez) and click **“Import”**.
 3. **Do not** click Deploy yet – add environment variables first.
 
 ### Step 3: Add environment variables
@@ -84,7 +84,7 @@ This makes the “Download CV” button download the PDF instead of opening the 
 
 1. Click **“Deploy”**.
 2. Vercel will run `npm run build` and deploy. This usually takes 1–2 minutes.
-3. When it finishes, you’ll see **“Congratulations!”** and a live URL like `https://zaidhusman.vercel.app` or `https://zaidhusman-xxxx.vercel.app`.
+3. When it finishes, you’ll see **“Congratulations!”** and a live URL like `https://zaidhusman-xxxx.vercel.app`.
 
 ### Step 5: Open your live site
 

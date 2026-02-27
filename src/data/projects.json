@@ -1,0 +1,21 @@
+[
+  {
+    "id": "2",
+    "title": "Gemstone POS & Inventory Management",
+    "description": "Developed a specialized AI-powered POS solution for gemstone and jewelry businesses. Intelligent inventory tracking, automated sales reporting, and streamlined operational workflows.",
+    "tech": [
+      "Python",
+      "AI",
+      "Inventory",
+      "Billing"
+    ],
+    "category": "Softwares",
+    "image": "/projects/1772162374787-Screenshot-2026-02-27-083212.png",
+    "images": [
+      "/projects/1772162374787-Screenshot-2026-02-27-083212.png"
+    ],
+    "featured": true,
+    "github": "",
+    "customLinks": []
+  }
+]

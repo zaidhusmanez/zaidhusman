@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { AnimateOnScroll } from './AnimateOnScroll'
-import { SectionHeader } from './SectionHeader'
-import { TiltCard } from './TiltCard'
-import { ExternalLink, Github, X, ChevronRight, Layout, Code, Palette, Grid, Link as LinkIcon, ChevronLeft } from 'lucide-react'
+import { AnimateOnScroll } from '@/components/AnimateOnScroll'
+import { SectionHeader } from '@/components/SectionHeader'
+import { TiltCard } from '@/components/TiltCard'
+import { ExternalLink, Github, X, ChevronRight, Layout, Code, Palette, Grid, Link as LinkIcon, ChevronLeft, ArrowLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Project } from '@/lib/projects'
 import Link from 'next/link'
@@ -16,9 +16,10 @@ const categories = [
   { name: 'Graphic Designs', icon: Palette },
 ]
 
-export function Projects() {
+export default function AllProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([])
-  const [featuredProjects, setFeaturedProjects] = useState<Project[]>([])
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
+  const [activeCategory, setActiveCategory] = useState('All')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [loading, setLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -26,11 +27,9 @@ export function Projects() {
   useEffect(() => {
     fetch('/api/projects')
       .then((res) => res.json())
-      .then((data: Project[]) => {
+      .then((data) => {
         setProjects(data)
-        // Filter and limit to 3 featured projects for the home page
-        const featured = data.filter(p => p.featured).slice(0, 3)
-        setFeaturedProjects(featured)
+        setFilteredProjects(data)
         setLoading(false)
       })
       .catch((err) => {
@@ -38,6 +37,14 @@ export function Projects() {
         setLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    if (activeCategory === 'All') {
+      setFilteredProjects(projects)
+    } else {
+      setFilteredProjects(projects.filter((p) => p.category === activeCategory))
+    }
+  }, [activeCategory, projects])
 
   const nextImage = () => {
     if (!selectedProject?.images) return
@@ -50,33 +57,54 @@ export function Projects() {
   }
 
   return (
-    <section id="projects" className="py-24 relative overflow-hidden">
+    <main className="min-h-screen bg-slate-950 text-slate-200 py-24 relative overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-[20%] -left-[10%] w-[40%] h-[40%] bg-amber-500/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[20%] -right-[10%] w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[10%] -left-[10%] w-[40%] h-[40%] bg-amber-500/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-          <AnimateOnScroll effect="blur">
-            <SectionHeader number="04" title="Featured" accent="Projects" />
-            <p className="text-slate-400 max-w-lg mt-4 leading-relaxed">
-              A curated selection of my top-tier work across software development, web design, and creative branding.
-            </p>
-          </AnimateOnScroll>
+        <div className="mb-12">
+          <Link 
+            href="/#projects" 
+            className="inline-flex items-center gap-2 text-slate-500 hover:text-amber-500 transition-colors mb-8 group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Home
+          </Link>
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
+                Full <span className="text-amber-500">Portfolio</span>
+              </h1>
+              <p className="text-slate-400 max-w-lg leading-relaxed">
+                Explore my complete collection of projects, from software architecture to creative designs.
+              </p>
+            </div>
 
-          <AnimateOnScroll delay={200}>
-            <Link 
-              href="/projects" 
-              className="group flex items-center gap-3 text-amber-500 font-bold hover:text-amber-400 transition-colors"
-            >
-              View All Projects
-              <div className="w-10 h-10 rounded-full border border-amber-500/30 flex items-center justify-center group-hover:border-amber-500 group-hover:bg-amber-500/10 transition-all">
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-              </div>
-            </Link>
-          </AnimateOnScroll>
+            {/* Category Filter */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => {
+                const Icon = cat.icon
+                return (
+                  <button
+                    key={cat.name}
+                    onClick={() => setActiveCategory(cat.name)}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-2 border ${
+                      activeCategory === cat.name
+                        ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-lg shadow-amber-500/20'
+                        : 'bg-slate-900/50 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {cat.name}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
 
         {loading ? (
@@ -84,70 +112,82 @@ export function Projects() {
             <div className="w-12 h-12 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.map((project, index) => (
-              <AnimateOnScroll key={project.id} delay={index * 100}>
-                <TiltCard className="h-full">
-                  <div 
-                    onClick={() => {
-                      setSelectedProject(project)
-                      setCurrentImageIndex(0)
-                    }}
-                    className="group relative glass-card card-glow rounded-3xl border border-slate-800/50 hover:border-amber-500/30 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
-                  >
-                    {/* Image Container */}
-                    <div className="aspect-[16/10] relative overflow-hidden bg-slate-900">
-                      {project.image ? (
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Code className="w-12 h-12 text-slate-800" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-                        <span className="text-amber-400 text-sm font-bold flex items-center gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                          View Project Details <ChevronRight className="w-4 h-4" />
-                        </span>
-                      </div>
-                      <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 bg-slate-950/60 backdrop-blur-md text-amber-500 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-white/5">
-                          {project.category}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p-8 flex flex-col flex-grow">
-                      <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-amber-400 transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-slate-400 text-sm mb-6 line-clamp-2 leading-relaxed flex-grow">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mt-auto">
-                        {project.tech.slice(0, 3).map((t) => (
-                          <span
-                            key={t}
-                            className="px-3 py-1 bg-slate-800/50 text-slate-500 text-[10px] font-medium rounded-lg border border-slate-700/30 group-hover:border-amber-500/20 group-hover:text-slate-400 transition-colors"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                        {project.tech.length > 3 && (
-                          <span className="px-3 py-1 bg-slate-800/50 text-slate-500 text-[10px] font-medium rounded-lg border border-slate-700/30">
-                            +{project.tech.length - 3}
-                          </span>
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <TiltCard className="h-full">
+                    <div 
+                      onClick={() => {
+                        setSelectedProject(project)
+                        setCurrentImageIndex(0)
+                      }}
+                      className="group relative glass-card card-glow rounded-3xl border border-slate-800/50 hover:border-amber-500/30 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
+                    >
+                      {/* Image Container */}
+                      <div className="aspect-[16/10] relative overflow-hidden bg-slate-900">
+                        {project.image ? (
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Code className="w-12 h-12 text-slate-800" />
+                          </div>
                         )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                          <span className="text-amber-400 text-sm font-bold flex items-center gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            View Project Details <ChevronRight className="w-4 h-4" />
+                          </span>
+                        </div>
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1 bg-slate-950/60 backdrop-blur-md text-amber-500 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-white/5">
+                            {project.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="p-8 flex flex-col flex-grow">
+                        <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-amber-400 transition-colors">
+                          {project.title}
+                        </h3>
+                        <p className="text-slate-400 text-sm mb-6 line-clamp-2 leading-relaxed flex-grow">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mt-auto">
+                          {project.tech.slice(0, 3).map((t) => (
+                            <span
+                              key={t}
+                              className="px-3 py-1 bg-slate-800/50 text-slate-500 text-[10px] font-medium rounded-lg border border-slate-700/30 group-hover:border-amber-500/20 group-hover:text-slate-400 transition-colors"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                          {project.tech.length > 3 && (
+                            <span className="px-3 py-1 bg-slate-800/50 text-slate-500 text-[10px] font-medium rounded-lg border border-slate-700/30">
+                              +{project.tech.length - 3}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </TiltCard>
-              </AnimateOnScroll>
-            ))}
-          </div>
+                  </TiltCard>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
 
@@ -298,6 +338,6 @@ export function Projects() {
           </div>
         )}
       </AnimatePresence>
-    </section>
+    </main>
   )
 }
