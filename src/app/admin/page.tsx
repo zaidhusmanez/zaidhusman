@@ -247,13 +247,10 @@ function ProjectForm({
     const uploadFiles = Array.from(files).slice(0, 5 - (formData.images?.length || 0))
     
     for (const file of uploadFiles) {
-      const uploadFormData = new FormData()
-      uploadFormData.append('file', file)
-      
       try {
-        const res = await fetch('/api/upload', {
+        const res = await fetch(`/api/upload?filename=${file.name}`, {
           method: 'POST',
-          body: uploadFormData,
+          body: file,
         })
         const data = await res.json()
         if (data.url) {
