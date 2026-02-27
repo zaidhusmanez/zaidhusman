@@ -240,30 +240,42 @@ function ProjectForm({
   const [newLinkLabel, setNewLinkLabel] = useState('')
   const [newLinkUrl, setNewLinkUrl] = useState('')
 
+  const [uploading, setUploading] = useState(false)
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files || files.length === 0) return
     
+    setUploading(true)
     const uploadFiles = Array.from(files).slice(0, 5 - (formData.images?.length || 0))
     
     for (const file of uploadFiles) {
       try {
-        const res = await fetch(`/api/upload?filename=${file.name}`, {
+        console.log(`Starting upload for ${file.name}...`)
+        const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
           method: 'POST',
           body: file,
         })
+        
         const data = await res.json()
-        if (data.url) {
+        
+        if (res.ok && data.url) {
+          console.log(`Successfully uploaded ${file.name}:`, data.url)
           setFormData(prev => ({
             ...prev,
             image: prev.image || data.url, // Set main image if not set
             images: [...(prev.images || []), data.url]
           }))
+        } else {
+          console.error(`Upload error for ${file.name}:`, data.message)
+          alert(`Upload failed for ${file.name}: ${data.message || 'Unknown error'}`)
         }
       } catch (err) {
-        alert('Upload failed')
+        console.error(`Upload catch error for ${file.name}:`, err)
+        alert(`Failed to upload ${file.name}. Check your connection and Vercel Blob setup.`)
       }
     }
+    setUploading(false)
   }
 
   const removeImage = (index: number) => {
@@ -465,19 +477,24 @@ function ProjectForm({
                       )}
                     </div>
                   ))}
-                  {(formData.images?.length || 0) < 5 && (
-                    <div className="relative aspect-video rounded-xl border-2 border-dashed border-slate-800 hover:border-amber-500/50 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer bg-slate-950/30">
-                      <input
-                        type="file"
-                        multiple
-                        onChange={handleImageUpload}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                        accept="image/*"
-                      />
+                  <div className={`relative aspect-video rounded-xl border-2 border-dashed border-slate-800 hover:border-amber-500/50 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer bg-slate-950/30 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    <input
+                      type="file"
+                      multiple
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                      accept="image/*"
+                    />
+                    {uploading ? (
+                      <div className="w-8 h-8 border-2 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+                    ) : (
                       <ImageIcon className="w-8 h-8 text-slate-700" />
-                      <span className="text-xs text-slate-500 font-bold uppercase tracking-tighter">Upload Images</span>
-                    </div>
-                  )}
+                    )}
+                    <span className="text-xs text-slate-500 font-bold uppercase tracking-tighter">
+                      {uploading ? 'Uploading...' : 'Upload Images'}
+                    </span>
+                  </div>
                 </div>
               </div>
 
