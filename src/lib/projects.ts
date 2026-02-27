@@ -60,18 +60,33 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function saveProjects(projects: Project[]): Promise<void> {
   try {
-    // Always save to KV for live site persistence
-    await kv.set(PROJECTS_KEY, projects);
+    // 1. Validate projects data
+    if (!projects || !Array.isArray(projects)) {
+      throw new Error('Invalid projects data format');
+    }
+
+    // 2. Try saving to KV (Redis)
+    try {
+      await kv.set(PROJECTS_KEY, projects);
+    } catch (kvError: any) {
+      console.error('KV Save Error:', kvError);
+      // If KV fails because it's not configured, provide a better message
+      if (kvError.message?.includes('token') || kvError.message?.includes('URL')) {
+        throw new Error(`KV Storage not configured: ${kvError.message}`);
+      }
+      throw kvError;
+    }
     
-    // Also try to save to local JSON file for local dev (might fail on Vercel, which is fine)
+    // 3. Try saving to local JSON (for local development only)
     try {
       await fs.writeFile(DATA_PATH, JSON.stringify(projects, null, 2), 'utf-8');
-    } catch {
+    } catch (fileError) {
       // Ignore write errors on Vercel's read-only filesystem
+      console.log('Local file write skipped (normal on Vercel)');
     }
-  } catch (error) {
-    console.error('Error saving projects data:', error);
-    throw new Error('Failed to save projects to permanent storage');
+  } catch (error: any) {
+    console.error('Final Save Error:', error);
+    throw new Error(error.message || 'Failed to save to permanent storage');
   }
 }
 
