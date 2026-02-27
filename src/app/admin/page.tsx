@@ -247,7 +247,7 @@ function ProjectForm({
     if (!files || files.length === 0) return
     
     setUploading(true)
-    const uploadFiles = Array.from(files).slice(0, 5 - (formData.images?.length || 0))
+    const uploadFiles = Array.from(files).slice(0, 10 - (formData.images?.length || 0))
     
     for (const file of uploadFiles) {
       try {
@@ -420,7 +420,39 @@ function ProjectForm({
                 />
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6 pt-6 border-t border-slate-800/50">
+                <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Main Links</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="flex items-center gap-3 mb-2 ml-1">
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span className="text-[10px] text-slate-500 font-bold uppercase">Live Demo</span>
+                    </div>
+                    <input
+                      type="url"
+                      value={formData.link}
+                      onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-2 ml-1">
+                      <Github className="w-3 h-3 text-slate-500" />
+                      <span className="text-[10px] text-slate-500 font-bold uppercase">GitHub Repo</span>
+                    </div>
+                    <input
+                      type="url"
+                      value={formData.github}
+                      onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
+                      placeholder="https://github.com/..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-6 border-t border-slate-800/50">
                 <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Custom Links</label>
                 <div className="flex gap-2">
                   <input
@@ -465,7 +497,7 @@ function ProjectForm({
             <div className="space-y-8 flex flex-col">
               <div>
                 <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-4 ml-1">
-                  Project Images (Max 5)
+                  Project Images (Max 10)
                 </label>
                 <div className="grid grid-cols-2 gap-4 mb-2">
                   {formData.images?.map((url, index) => (
@@ -502,38 +534,6 @@ function ProjectForm({
                     <span className="text-xs text-slate-500 font-bold uppercase tracking-tighter">
                       {uploading ? 'Uploading...' : 'Upload Images'}
                     </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-6 pt-4 border-t border-slate-800/50">
-                <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Main Links</label>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2 ml-1">
-                      <ExternalLink className="w-3 h-3 text-slate-500" />
-                      <span className="text-[10px] text-slate-500 font-bold uppercase">Live Demo</span>
-                    </div>
-                    <input
-                      type="url"
-                      value={formData.link}
-                      onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
-                      placeholder="https://..."
-                    />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-3 mb-2 ml-1">
-                      <Github className="w-3 h-3 text-slate-500" />
-                      <span className="text-[10px] text-slate-500 font-bold uppercase">GitHub Repo</span>
-                    </div>
-                    <input
-                      type="url"
-                      value={formData.github}
-                      onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
-                      placeholder="https://github.com/..."
-                    />
                   </div>
                 </div>
               </div>
