@@ -8,29 +8,45 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-  }
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
 
-  const projectData = await request.json();
-  const newProject = await addProject(projectData);
-  return NextResponse.json(newProject, { status: 201 });
+    const projectData = await request.json();
+    const newProject = await addProject(projectData);
+    return NextResponse.json(newProject, { status: 201 });
+  } catch (error: any) {
+    console.error('Project creation error:', error);
+    return NextResponse.json({ 
+      message: 'Failed to add project', 
+      error: error.message || 'Unknown error' 
+    }, { status: 500 });
+  }
 }
 
 export async function PUT(request: NextRequest) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-  }
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
 
-  const { id, ...updatedProject } = await request.json();
-  const result = await updateProject(id, updatedProject);
+    const { id, ...updatedProject } = await request.json();
+    const result = await updateProject(id, updatedProject);
 
-  if (result) {
-    return NextResponse.json(result);
-  } else {
-    return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+    if (result) {
+      return NextResponse.json(result);
+    } else {
+      return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+    }
+  } catch (error: any) {
+    console.error('Project update error:', error);
+    return NextResponse.json({ 
+      message: 'Failed to update project', 
+      error: error.message || 'Unknown error' 
+    }, { status: 500 });
   }
 }
 

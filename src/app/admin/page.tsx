@@ -330,10 +330,13 @@ function ProjectForm({
         body: JSON.stringify(body),
       })
 
+      const result = await res.json()
+
       if (res.ok) {
         onSuccess()
       } else {
-        alert('Failed to save project')
+        console.error('Save Error:', result)
+        alert(`Failed to save project: ${result.message || result.error || 'Unknown error'}`)
       }
     } catch (err) {
       alert('Error saving project')
@@ -458,77 +461,81 @@ function ProjectForm({
               </div>
             </div>
 
-            <div className="space-y-6">
-              <div>
-                <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-4 ml-1">
-                  Project Images (Max 5)
-                </label>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {formData.images?.map((url, index) => (
-                    <div key={index} className="relative aspect-video rounded-xl overflow-hidden border border-slate-800 group">
-                      <img src={url} alt={`Upload ${index}`} className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        className="absolute top-2 right-2 w-8 h-8 bg-red-500/80 text-white rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                      {index === 0 && (
-                        <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-amber-500 text-slate-950 text-[10px] font-bold rounded uppercase">
-                          Main
-                        </div>
+            <div className="space-y-6 flex flex-col h-full">
+              <div className="flex-grow space-y-6">
+                <div>
+                  <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-4 ml-1">
+                    Project Images (Max 5)
+                  </label>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {formData.images?.map((url, index) => (
+                      <div key={index} className="relative aspect-video rounded-xl overflow-hidden border border-slate-800 group">
+                        <img src={url} alt={`Upload ${index}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute top-2 right-2 w-8 h-8 bg-red-500/80 text-white rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                        {index === 0 && (
+                          <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-amber-500 text-slate-950 text-[10px] font-bold rounded uppercase">
+                            Main
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    <div className={`relative aspect-video rounded-xl border-2 border-dashed border-slate-800 hover:border-amber-500/50 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer bg-slate-950/30 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                      <input
+                        type="file"
+                        multiple
+                        onChange={handleImageUpload}
+                        disabled={uploading}
+                        className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                        accept="image/*"
+                      />
+                      {uploading ? (
+                        <div className="w-8 h-8 border-2 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+                      ) : (
+                        <ImageIcon className="w-8 h-8 text-slate-700" />
                       )}
+                      <span className="text-xs text-slate-500 font-bold uppercase tracking-tighter">
+                        {uploading ? 'Uploading...' : 'Upload Images'}
+                      </span>
                     </div>
-                  ))}
-                  <div className={`relative aspect-video rounded-xl border-2 border-dashed border-slate-800 hover:border-amber-500/50 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer bg-slate-950/30 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleImageUpload}
-                      disabled={uploading}
-                      className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
-                      accept="image/*"
-                    />
-                    {uploading ? (
-                      <div className="w-8 h-8 border-2 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
-                    ) : (
-                      <ImageIcon className="w-8 h-8 text-slate-700" />
-                    )}
-                    <span className="text-xs text-slate-500 font-bold uppercase tracking-tighter">
-                      {uploading ? 'Uploading...' : 'Upload Images'}
-                    </span>
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-4">
-                <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Main Links</label>
-                <div>
-                  <div className="flex items-center gap-3 mb-2 ml-1">
-                    <ExternalLink className="w-3 h-3 text-slate-500" />
-                    <span className="text-[10px] text-slate-500 font-bold uppercase">Live Demo</span>
+                <div className="space-y-4">
+                  <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Main Links</label>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2 ml-1">
+                        <ExternalLink className="w-3 h-3 text-slate-500" />
+                        <span className="text-[10px] text-slate-500 font-bold uppercase">Live Demo</span>
+                      </div>
+                      <input
+                        type="url"
+                        value={formData.link}
+                        onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
+                        placeholder="https://..."
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3 mb-2 ml-1">
+                        <Github className="w-3 h-3 text-slate-500" />
+                        <span className="text-[10px] text-slate-500 font-bold uppercase">GitHub Repo</span>
+                      </div>
+                      <input
+                        type="url"
+                        value={formData.github}
+                        onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
+                        placeholder="https://github.com/..."
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="url"
-                    value={formData.link}
-                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
-                    placeholder="https://..."
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center gap-3 mb-2 ml-1">
-                    <Github className="w-3 h-3 text-slate-500" />
-                    <span className="text-[10px] text-slate-500 font-bold uppercase">GitHub Repo</span>
-                  </div>
-                  <input
-                    type="url"
-                    value={formData.github}
-                    onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:border-amber-500/50 focus:outline-none transition-all"
-                    placeholder="https://github.com/..."
-                  />
                 </div>
               </div>
             </div>
