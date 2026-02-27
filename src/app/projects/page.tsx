@@ -127,12 +127,14 @@ export default function AllProjectsPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <TiltCard className="h-full">
-                    <div 
+                    <motion.div 
+                      whileHover={{ y: -10 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       onClick={() => {
                         setSelectedProject(project)
                         setCurrentImageIndex(0)
                       }}
-                      className="group relative glass-card card-glow rounded-3xl border border-slate-800/50 hover:border-amber-500/30 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
+                      className="group relative glass-card card-glow rounded-3xl border border-white/5 hover:border-amber-500/30 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
                     >
                       {/* Image Container */}
                       <div className="aspect-[16/10] relative overflow-hidden bg-slate-900">
@@ -182,7 +184,7 @@ export default function AllProjectsPage() {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   </TiltCard>
                 </motion.div>
               ))}

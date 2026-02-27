@@ -106,7 +106,7 @@ export function Hero() {
           }}
         >
           Hi, I&apos;m <br className="sm:hidden" />
-          <span className="gradient-text animate-gradient tracking-tight">ZAIDH USMAN</span>
+          <span className="gradient-text-premium tracking-tight">ZAIDH USMAN</span>
         </h1>
 
         <p
