@@ -270,8 +270,9 @@ function ProjectForm({
             images: [...(prev.images || []), data.url]
           }))
         } else {
-          console.error('Upload Error:', data)
-          alert(`Upload failed: ${data.message || data.error || 'Unknown error'}`)
+          console.error('Full Upload Error Response:', data)
+          const errorMsg = data.details || data.message || data.error || 'Unknown error'
+          alert(`Upload failed: ${errorMsg}`)
         }
       } catch (err) {
         console.error('Network Error:', err)

@@ -17,25 +17,41 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const contentType = request.headers.get('content-type') || '';
+    
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      const file = formData.get('file') as File;
 
-    if (!file) {
-      return NextResponse.json({ message: 'No file found in request' }, { status: 400 });
+      if (!file) {
+        return NextResponse.json({ message: 'No file found in form data' }, { status: 400 });
+      }
+
+      const blob = await put(file.name, file, {
+        access: 'public',
+        addRandomSuffix: true,
+      });
+
+      return NextResponse.json(blob);
+    } else {
+      // Fallback for direct binary uploads
+      const { searchParams } = new URL(request.url);
+      const filename = searchParams.get('filename') || 'upload.png';
+      const blobData = await request.blob();
+      
+      const blob = await put(filename, blobData, {
+        access: 'public',
+        addRandomSuffix: true,
+      });
+
+      return NextResponse.json(blob);
     }
-
-    // 3. Upload to Vercel Blob
-    const blob = await put(file.name, file, {
-      access: 'public',
-      addRandomSuffix: true,
-    });
-
-    return NextResponse.json(blob);
   } catch (error: any) {
     console.error('Vercel Blob Error:', error);
     return NextResponse.json({ 
-      message: 'Upload process failed', 
-      error: error.message || 'Unknown server error' 
+      message: 'Server error during upload', 
+      details: error.message || 'Unknown error',
+      type: error.name
     }, { status: 500 });
   }
 }
