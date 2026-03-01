@@ -44,9 +44,12 @@ export function Projects() {
     setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images.length)
   }
 
-  const prevImage = () => {
-    if (!selectedProject?.images) return
-    setCurrentImageIndex((prev) => (prev - 1 + selectedProject.images.length) % selectedProject.images.length)
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
   }
 
   return (
@@ -87,16 +90,15 @@ export function Projects() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProjects.map((project, index) => (
               <AnimateOnScroll key={project.id} delay={index * 100}>
-                  <TiltCard className="h-full">
-                    <motion.div 
-                      whileHover={{ y: -10 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                      onClick={() => {
-                        setSelectedProject(project)
-                        setCurrentImageIndex(0)
-                      }}
-                      className="group relative glass-card card-glow rounded-3xl border border-white/5 hover:border-amber-500/30 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
-                    >
+                <TiltCard className="h-full">
+                  <div 
+                    onClick={() => {
+                      setSelectedProject(project)
+                      setCurrentImageIndex(0)
+                    }}
+                    onMouseMove={handleMouseMove}
+                    className="group relative glass-card card-glow rounded-3xl border border-slate-800/50 hover:border-amber-500/30 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
+                  >
                     {/* Image Container */}
                     <div className="aspect-[16/10] relative overflow-hidden bg-slate-900">
                       {project.image ? (
@@ -145,8 +147,8 @@ export function Projects() {
                         )}
                       </div>
                     </div>
-                  </motion.div>
-                  </TiltCard>
+                  </div>
+                </TiltCard>
               </AnimateOnScroll>
             ))}
           </div>

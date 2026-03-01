@@ -32,15 +32,30 @@ export function Navbar() {
           }
         })
       },
-      { threshold: 0.3, rootMargin: '-20% 0px -70% 0px' }
+      { 
+        // More sensitive threshold
+        threshold: [0.1, 0.5, 0.8],
+        // Focus on the top half of the screen for active state
+        rootMargin: '-10% 0px -40% 0px' 
+      }
     )
     navLinks.forEach(({ href }) => {
       const id = href.slice(1)
       const el = document.getElementById(id)
       if (el) observer.observe(el)
     })
+    
+    // Also observe hero
+    const heroEl = document.getElementById('hero')
+    if (heroEl) observer.observe(heroEl)
+    
     return () => observer.disconnect()
   }, [])
+
+  const handleNavLinkClick = (id: string) => {
+    setActiveSection(id)
+    setIsMobileMenuOpen(false)
+  }
 
   return (
     <header
@@ -49,7 +64,11 @@ export function Navbar() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" className="font-display font-bold text-xl text-white hover:text-amber-400 transition-colors duration-300 tracking-tight">
+        <a 
+          href="#" 
+          className="font-display font-bold text-xl text-white hover:text-amber-400 transition-colors duration-300 tracking-tight"
+          onClick={() => setActiveSection('')}
+        >
           ZAIDH USMAN
         </a>
 
@@ -82,7 +101,7 @@ export function Navbar() {
                   className={`nav-link-underline transition-all duration-300 py-2 block hover:translate-x-1 ${
                     isActive ? 'text-amber-400 font-medium nav-link-active' : 'text-slate-400 hover:text-amber-400'
                   }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => handleNavLinkClick(id)}
                 >
                   {link.label}
                 </a>
