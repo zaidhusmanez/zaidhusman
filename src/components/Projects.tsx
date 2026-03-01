@@ -44,6 +44,11 @@ export function Projects() {
     setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images.length)
   }
 
+  const prevImage = () => {
+    if (!selectedProject?.images) return
+    setCurrentImageIndex((prev) => (prev - 1 + selectedProject.images.length) % selectedProject.images.length)
+  }
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
