@@ -7,8 +7,6 @@ import { Experience } from '@/components/Experience'
 import { Projects } from '@/components/Projects'
 import { Education } from '@/components/Education'
 import { Services } from '@/components/Services'
-import { Process } from '@/components/Process'
-import { FAQ } from '@/components/FAQ'
 import { CTABanner } from '@/components/CTABanner'
 import { Contact } from '@/components/Contact'
 import { Footer } from '@/components/Footer'
@@ -30,10 +28,6 @@ export default function Home() {
       <Education />
       <SectionDivider />
       <Services />
-      <SectionDivider />
-      <Process />
-      <SectionDivider />
-      <FAQ />
       <SectionDivider />
       <CTABanner />
       <Contact />
