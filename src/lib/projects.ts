@@ -1,16 +1,42 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-const PROJECTS_KEY = 'portfolio_projects';
 const DATA_PATH = path.join(process.cwd(), 'src/data/projects.json');
 
-// Only use Vercel KV if credentials are configured
-const isKvConfigured = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+// KV credentials — only used on Vercel
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+const PROJECTS_KEY = 'portfolio_projects';
+const isKvConfigured = !!(KV_URL && KV_TOKEN);
 
-async function getKv() {
-  if (!isKvConfigured) return null;
-  const { kv } = await import('@vercel/kv');
-  return kv;
+// Lightweight KV access via REST (no SDK needed — avoids env-var throw at startup)
+async function kvGet<T>(key: string): Promise<T | null> {
+  try {
+    const res = await fetch(`${KV_URL}/get/${key}`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` },
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.result as T | null;
+  } catch {
+    return null;
+  }
+}
+
+async function kvSet(key: string, value: unknown): Promise<void> {
+  const res = await fetch(`${KV_URL}/set/${key}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${KV_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(value),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`KV set failed: ${text}`);
+  }
 }
 
 export interface CustomLink {
@@ -33,35 +59,22 @@ export interface Project {
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const kv = await getKv();
-
-  if (kv) {
+  if (isKvConfigured) {
     try {
-      // 1. Try to get projects from KV (Live persistence)
-      let projects = await kv.get<Project[]>(PROJECTS_KEY);
+      const projects = await kvGet<Project[]>(PROJECTS_KEY);
+      if (projects && projects.length > 0) return projects;
 
-      // 2. If KV is empty, fall back to JSON file and seed KV
-      if (!projects) {
-        try {
-          const fileData = await fs.readFile(DATA_PATH, 'utf-8');
-          projects = JSON.parse(fileData);
-
-          if (projects && projects.length > 0) {
-            await kv.set(PROJECTS_KEY, projects);
-          }
-        } catch (fileError) {
-          console.error('JSON file error:', fileError);
-          return [];
-        }
-      }
-
-      return projects || [];
+      // KV empty — seed from JSON file
+      const fileData = await fs.readFile(DATA_PATH, 'utf-8');
+      const parsed: Project[] = JSON.parse(fileData);
+      if (parsed.length > 0) await kvSet(PROJECTS_KEY, parsed);
+      return parsed;
     } catch (error) {
-      console.error('KV Storage error:', error);
+      console.error('KV getProjects error:', error);
     }
   }
 
-  // No KV or KV failed — use local JSON file
+  // Local JSON fallback
   try {
     const fileData = await fs.readFile(DATA_PATH, 'utf-8');
     return JSON.parse(fileData);
@@ -75,38 +88,20 @@ export async function saveProjects(projects: Project[]): Promise<void> {
     throw new Error('Invalid projects data format');
   }
 
-  const kv = await getKv();
-
-  if (kv) {
-    try {
-      await kv.set(PROJECTS_KEY, projects);
-    } catch (kvError: any) {
-      console.error('KV Save Error:', kvError);
-      if (kvError.message?.includes('token') || kvError.message?.includes('URL')) {
-        throw new Error(`KV Storage not configured: ${kvError.message}`);
-      }
-      throw kvError;
-    }
+  if (isKvConfigured) {
+    await kvSet(PROJECTS_KEY, projects);
+    // Also try local write (silently fails on Vercel read-only FS)
+    try { await fs.writeFile(DATA_PATH, JSON.stringify(projects, null, 2), 'utf-8'); } catch {}
+    return;
   }
 
-  // Always try to write to local JSON (works in dev, silently skipped on Vercel)
-  try {
-    await fs.writeFile(DATA_PATH, JSON.stringify(projects, null, 2), 'utf-8');
-  } catch (fileError) {
-    if (!kv) {
-      // If KV isn't configured either, this is a real error
-      throw new Error('Failed to save projects: no KV configured and local file write failed');
-    }
-    console.log('Local file write skipped (normal on Vercel)');
-  }
+  // Local-only: write to JSON file
+  await fs.writeFile(DATA_PATH, JSON.stringify(projects, null, 2), 'utf-8');
 }
 
 export async function addProject(project: Omit<Project, 'id'>): Promise<Project> {
   const projects = await getProjects();
-  const newProject = {
-    ...project,
-    id: Date.now().toString(),
-  };
+  const newProject: Project = { ...project, id: Date.now().toString() };
   projects.push(newProject);
   await saveProjects(projects);
   return newProject;
@@ -116,7 +111,6 @@ export async function updateProject(id: string, updatedProject: Partial<Project>
   const projects = await getProjects();
   const index = projects.findIndex((p) => p.id === id);
   if (index === -1) return null;
-
   projects[index] = { ...projects[index], ...updatedProject };
   await saveProjects(projects);
   return projects[index];
@@ -124,9 +118,8 @@ export async function updateProject(id: string, updatedProject: Partial<Project>
 
 export async function deleteProject(id: string): Promise<boolean> {
   const projects = await getProjects();
-  const filteredProjects = projects.filter((p) => p.id !== id);
-  if (filteredProjects.length === projects.length) return false;
-
-  await saveProjects(filteredProjects);
+  const filtered = projects.filter((p) => p.id !== id);
+  if (filtered.length === projects.length) return false;
+  await saveProjects(filtered);
   return true;
 }

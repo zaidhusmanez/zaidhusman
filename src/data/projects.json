@@ -1,20 +1,105 @@
 [
   {
+    "id": "1",
+    "title": "Ocean Lighting Solutions",
+    "description": "Business & e-commerce website for a lighting and bathware showroom in Negombo, Sri Lanka. Customers can browse LED lights and bathroom products, save favourites to a wishlist, view past projects, and contact the team by phone, WhatsApp, or quote request.",
+    "tech": ["WordPress", "HTML", "CSS", "JavaScript", "Responsive Design", "SEO"],
+    "category": "Websites",
+    "image": "",
+    "images": [],
+    "featured": true,
+    "link": "https://oceanlighting.lk",
+    "github": "",
+    "customLinks": []
+  },
+  {
     "id": "2",
-    "title": "Gemstone POS & Inventory Management",
-    "description": "Developed a specialized AI-powered POS solution for gemstone and jewelry businesses. Intelligent inventory tracking, automated sales reporting, and streamlined operational workflows.",
-    "tech": [
-      "Python",
-      "AI",
-      "Inventory",
-      "Billing"
-    ],
+    "title": "Azytion - Digital Solutions Company Website",
+    "description": "Website for a Sri Lanka-based digital company offering software development, web design, graphic design, video editing, digital marketing, and ready-made business systems. Features service pages, ready-made products (POS, ERP, CRM, LMS), portfolio section, project cost calculator, and contact forms.",
+    "tech": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Responsive Design"],
+    "category": "Websites",
+    "image": "",
+    "images": [],
+    "featured": true,
+    "link": "https://azytion.vercel.app",
+    "github": "",
+    "customLinks": []
+  },
+  {
+    "id": "3",
+    "title": "USGEMS - Luxury Gemstone Dealer Website",
+    "description": "Elegant e-commerce website for a gemstone dealer showcasing rubies, sapphires, emeralds, and diamonds. Features collection pages with filters by gem type, product detail pages, certification and trust sections, customer reviews, and a private viewing booking flow.",
+    "tech": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Responsive Design"],
+    "category": "Websites",
+    "image": "",
+    "images": [],
+    "featured": true,
+    "link": "https://usgems.vercel.app",
+    "github": "",
+    "customLinks": []
+  },
+  {
+    "id": "4",
+    "title": "Azdars - Digital Studio & Agency Website",
+    "description": "Bold, modern agency website presenting studio services, software products (POS, inventory, finance, CRM), partnership options, FAQ section, affiliate programme, and project enquiry form with single-page navigation.",
+    "tech": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    "category": "Websites",
+    "image": "",
+    "images": [],
+    "featured": false,
+    "link": "https://azdars.vercel.app",
+    "github": "",
+    "customLinks": []
+  },
+  {
+    "id": "5",
+    "title": "Zaidh Usman - Personal Portfolio Website",
+    "description": "Personal branding and portfolio website introducing skills, experience, projects, education, and services. Features CV download, contact form, social links, and a fully responsive modern design.",
+    "tech": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vercel"],
+    "category": "Websites",
+    "image": "",
+    "images": [],
+    "featured": false,
+    "link": "https://zaidhusman.vercel.app",
+    "github": "https://github.com/zaidhusmanez",
+    "customLinks": []
+  },
+  {
+    "id": "6",
+    "title": "Multi-Industry Web-Based ERP & POS System",
+    "description": "Comprehensive web-based ERP and POS concept for managing business operations across multiple industries. Features advanced dashboard, sales management, inventory tracking, finance & accounting, and cloud access.",
+    "tech": ["Next.js 16", "React 19", "MySQL 8", "TypeScript", "PWA", "Dexie.js", "TanStack Query", "Recharts", "Framer Motion"],
+    "category": "Softwares",
+    "image": "",
+    "images": [],
+    "featured": true,
+    "link": "",
+    "github": "",
+    "customLinks": []
+  },
+  {
+    "id": "7",
+    "title": "Gemstone Industry Web-Based ERP & POS System",
+    "description": "Business-focused ERP and POS solution for the gemstone industry. Includes gem inventory management, memo/consignment management, gem certification, sales management, customer & broker management, purchase orders, finance & accounting, and multi-device cloud access.",
+    "tech": ["Next.js 16", "React 19", "MySQL 8", "TypeScript", "Dexie.js", "TanStack Query", "PWA", "Recharts"],
     "category": "Softwares",
     "image": "/projects/1772162374787-Screenshot-2026-02-27-083212.png",
-    "images": [
-      "/projects/1772162374787-Screenshot-2026-02-27-083212.png"
-    ],
+    "images": ["/projects/1772162374787-Screenshot-2026-02-27-083212.png"],
     "featured": true,
+    "link": "",
+    "github": "",
+    "customLinks": []
+  },
+  {
+    "id": "8",
+    "title": "Brand Identity & Graphic Design",
+    "description": "Logo designs, brand identity packages, social media graphics, and marketing materials for multiple clients including Ocean Lighting Solutions, USGEMS, Azytion, Azdars, Royal Property, Property Lanka, and Zuhara. Focused on clear messages and consistent branding.",
+    "tech": ["Adobe Photoshop", "Adobe Illustrator", "Canva", "Figma"],
+    "category": "Graphic Designs",
+    "image": "",
+    "images": [],
+    "featured": false,
+    "link": "",
     "github": "",
     "customLinks": []
   }
