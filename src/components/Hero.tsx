@@ -130,8 +130,8 @@ export function Hero() {
           }}
         >
           Building AI-integrated software, scalable web applications, and impactful digital
-          experiences. Founder of <span className="text-amber-400 font-semibold">ZATION</span> — delivering
-          intelligent POS systems, websites, and branding solutions.
+          experiences. Co-Founder of <span className="text-amber-400 font-semibold">Azytion</span> — delivering
+          intelligent ERP &amp; POS systems, business websites, and branding solutions.
         </p>
 
         <div

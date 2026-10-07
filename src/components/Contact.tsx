@@ -44,7 +44,7 @@ export function Contact() {
                 </a>
                 
                 <a
-                  href="tel:+94752723544"
+                  href="tel:+94777455122"
                   className="flex items-center gap-5 p-8 glass-card card-glow rounded-2xl hover:border-slate-600/80 hover:scale-[1.02] transition-all duration-500 group"
                 >
                   <div className="p-4 bg-amber-500/10 rounded-2xl group-hover:bg-amber-500/20 transition-colors duration-300">
@@ -52,7 +52,7 @@ export function Contact() {
                   </div>
                   <div>
                     <p className="text-slate-500/80 text-xs font-semibold uppercase tracking-premium-wider">Phone</p>
-                    <p className="text-white font-medium mt-1.5">+94 75 272 3544</p>
+                    <p className="text-white font-medium mt-1.5">+94 777 455 122</p>
                   </div>
                 </a>
               </div>

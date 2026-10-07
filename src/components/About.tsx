@@ -13,17 +13,19 @@ export function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-slate-400/90 text-lg leading-relaxed mb-6">
-                I&apos;m a motivated Software and Web Developer with hands-on experience in
-                AI-integrated software, web applications, and digital solutions. As the founder
-                of ZATION, I lead a software and design startup that delivers intelligent POS
-                systems, business websites, and branding solutions.
+                I&apos;m a motivated and aspiring Computer Science student with 3+ years of
+                practical experience in software development, web development, and graphic
+                design. Hands-on experience gained through freelance work, entrepreneurship,
+                and developing business-focused software solutions, including ERP and POS systems.
               </p>
               <p className="text-slate-400/90 text-lg leading-relaxed mb-8">
-                I&apos;m skilled in modern web technologies, automation, and AI-powered tools to
-                improve business efficiency. I&apos;m passionate about building scalable systems
-                and creating impactful digital experiences. As a strong communicator, problem
-                solver, and fast learner, I&apos;m always seeking opportunities in Software
-                Development or Web Development.
+                Skilled in modern programming languages, web technologies, databases, UI/UX
+                design, and AI-assisted development. Passionate about Software Engineering,
+                Artificial Intelligence, automation, and building practical technology solutions
+                for real-world business needs. As co-founder of{' '}
+                <span className="text-amber-400 font-semibold">Azytion</span> — a digital
+                solutions company — I contribute across software development, web design,
+                graphic design, and digital solution planning.
               </p>
               <div className="flex flex-wrap gap-4">
                 <div className="px-6 py-4 glass-card rounded-2xl hover:border-slate-600/80 transition-colors duration-300">
@@ -32,14 +34,18 @@ export function About() {
                 </div>
                 <div className="px-6 py-4 glass-card rounded-2xl hover:border-slate-600/80 transition-colors duration-300">
                   <span className="text-slate-500/80 text-xs font-semibold uppercase tracking-premium-wider">Languages</span>
-                  <p className="text-white font-medium mt-1.5">English, Tamil, Sinhala</p>
+                  <p className="text-white font-medium mt-1.5">English · Tamil · Sinhala</p>
+                </div>
+                <div className="px-6 py-4 glass-card rounded-2xl hover:border-slate-600/80 transition-colors duration-300">
+                  <span className="text-slate-500/80 text-xs font-semibold uppercase tracking-premium-wider">Company</span>
+                  <p className="text-white font-medium mt-1.5">Azytion</p>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-2 gap-5">
               <div className="p-8 glass-card card-glow rounded-2xl hover:border-slate-600/80 transition-all duration-500 group">
                 <p className="font-display text-4xl font-bold gradient-text group-hover:scale-105 transition-transform duration-300">
-                  <CountUp end={2} suffix="+" duration={1200} />
+                  <CountUp end={3} suffix="+" duration={1200} />
                 </p>
                 <p className="text-slate-500/80 text-sm mt-2 tracking-premium">Years Experience</p>
               </div>

@@ -5,29 +5,40 @@ import { SectionHeader } from './SectionHeader'
 
 const skillCategories = [
   {
-    title: 'Programming & Development',
-    skills: ['Python', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'HTML', 'CSS'],
+    title: 'Programming & Web Development',
+    skills: ['Python', 'JavaScript', 'TypeScript', 'React.js', 'Next.js', 'Node.js', 'HTML', 'CSS', 'REST API Integration', 'SDLC'],
     icon: '💻',
+  },
+  {
+    title: 'Database & Backend',
+    skills: ['MySQL', 'SQL Server', 'Database Design', 'CRUD Operations', 'Data Management'],
+    icon: '🗄️',
   },
   {
     title: 'AI & Automation',
     skills: [
-      'AI-Assisted Development',
       'Prompt Engineering',
+      'AI-Assisted Development',
       'AI Automation Workflows',
-      'AI Integration',
-      'Business Process Optimization',
+      'Business Process Automation',
+      'AI Productivity Tools',
+      'AI Image & Video Generation',
     ],
     icon: '🤖',
   },
   {
-    title: 'Design & UI/UX',
-    skills: ['Figma', 'WordPress', 'Responsive Design', 'UI/UX Design', 'Adobe Photoshop', 'Adobe Illustrator', 'Canva'],
+    title: 'Web & UI/UX Design',
+    skills: ['WordPress', 'UI/UX Design', 'Figma', 'Responsive Web Design', 'SEO Optimization', 'Website Performance Optimization'],
     icon: '🎨',
   },
   {
-    title: 'Professional',
-    skills: ['Leadership', 'Communication', 'Problem Solving', 'Teamwork', 'Creativity', 'Project Management'],
+    title: 'Graphic Design',
+    skills: ['Adobe Photoshop', 'Adobe Illustrator', 'Canva', 'Logo Design', 'Brand Identity Design', 'Marketing Materials', 'Social Media Design', 'Print Design'],
+    icon: '✏️',
+  },
+  {
+    title: 'Professional Skills',
+    skills: ['Problem Solving', 'Creativity', 'Communication', 'Teamwork', 'Leadership', 'Presentation Skills', 'Organizational Skills', 'Project Coordination'],
     icon: '⭐',
   },
 ]
@@ -38,7 +49,7 @@ export function Skills() {
       <div className="max-w-6xl mx-auto px-6">
         <AnimateOnScroll effect="scale">
           <SectionHeader number="02" title="Core" accent="Skills" />
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skillCategories.map((category) => (
               <div
                 key={category.title}

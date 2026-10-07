@@ -5,9 +5,14 @@ import { SectionHeader } from './SectionHeader'
 
 const education = [
   {
-    degree: 'Diploma & Advanced Diploma in Computer Science',
+    degree: 'Diploma in Computer Science (Ongoing)',
     institution: 'Australian College of Business and Technology',
-    period: 'Ongoing · Expected 2026',
+    period: 'Expected Completion: October 2026',
+  },
+  {
+    degree: 'International English Language Testing System (IELTS)',
+    institution: 'Australian College of Business and Technology',
+    period: '2025',
   },
   {
     degree: 'International University Foundation in Computing',

@@ -16,7 +16,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
             <p className="font-display font-bold text-white text-xl tracking-tight">ZAIDH USMAN</p>
-            <p className="text-slate-500/80 text-sm mt-1.5 tracking-premium">Software Developer & Designer</p>
+            <p className="text-slate-500/80 text-sm mt-1.5 tracking-premium">Software Developer · Web &amp; Graphic Designer</p>
           </div>
           <div className="flex items-center gap-6">
             {socials.map((social) => (
